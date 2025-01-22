@@ -10,11 +10,15 @@
     <h2>Auto Refresh Tab</h2>
     <label for="interval">Interval (seconds):</label>
     <input type="number" id="interval" min="1" value="5">
+    <label><input type="checkbox" id="hardRefresh"> Hard Refresh</label>
     <div class="buttons">
       <button id="start">Start</button>
       <button id="stop">Stop</button>
+      <button id="globalStart">Global Start</button>
+      <button id="globalStop">Global Stop</button>
     </div>
+    <h3>Active Tabs</h3>
+    <ul id="activeTabs"></ul>
   </div>
 </body>
 </html>
-
