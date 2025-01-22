@@ -1,4 +1,3 @@
-// popup.js
 document.getElementById("start").addEventListener("click", () => {
     let interval = document.getElementById("interval").value;
     let hardRefresh = document.getElementById("hardRefresh").checked;
@@ -20,15 +19,8 @@ document.getElementById("start").addEventListener("click", () => {
     });
   });
   
-  document.getElementById("globalStart").addEventListener("click", () => {
-    let interval = document.getElementById("interval").value;
-    let hardRefresh = document.getElementById("hardRefresh").checked;
-    chrome.runtime.sendMessage({ action: "globalStart", interval: parseInt(interval), hardRefresh: hardRefresh });
-    updateActiveTabs();
-  });
-  
-  document.getElementById("globalStop").addEventListener("click", () => {
-    chrome.runtime.sendMessage({ action: "globalStop" });
+  document.getElementById("clear").addEventListener("click", () => {
+    chrome.runtime.sendMessage({ action: "clear" });
     updateActiveTabs();
   });
   
@@ -38,16 +30,18 @@ document.getElementById("start").addEventListener("click", () => {
       let list = document.getElementById("activeTabs");
       list.innerHTML = "";
       Object.keys(activeTabs).forEach(tabId => {
-        let listItem = document.createElement("li");
-        listItem.textContent = "Tab ID: " + tabId;
-        let stopButton = document.createElement("button");
-        stopButton.textContent = "✖";
-        stopButton.addEventListener("click", () => {
-          chrome.runtime.sendMessage({ action: "stop", tabId: parseInt(tabId) });
-          updateActiveTabs();
+        chrome.tabs.get(parseInt(tabId), (tab) => {
+          let listItem = document.createElement("li");
+          listItem.textContent = tab.title || tab.url;
+          let stopButton = document.createElement("button");
+          stopButton.textContent = "✖";
+          stopButton.addEventListener("click", () => {
+            chrome.runtime.sendMessage({ action: "stop", tabId: parseInt(tabId) });
+            updateActiveTabs();
+          });
+          listItem.appendChild(stopButton);
+          list.appendChild(listItem);
         });
-        listItem.appendChild(stopButton);
-        list.appendChild(listItem);
       });
     });
   }

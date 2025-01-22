@@ -9,12 +9,14 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     startRefreshing(request.tabId, request.interval, request.hardRefresh);
   } else if (request.action === "stop") {
     stopRefreshing(request.tabId);
-  } else if (request.action === "globalStart") {
-    chrome.tabs.query({}, (tabs) => {
-      tabs.forEach(tab => startRefreshing(tab.id, request.interval, request.hardRefresh));
-    });
-  } else if (request.action === "globalStop") {
+  } else if (request.action === "resume") {
+    Object.keys(refreshIntervals).forEach(tabId => startRefreshing(parseInt(tabId), request.interval, request.hardRefresh));
+  } else if (request.action === "pause") {
     Object.keys(refreshIntervals).forEach(tabId => stopRefreshing(parseInt(tabId)));
+  } else if (request.action === "clear") {
+    Object.keys(refreshIntervals).forEach(tabId => stopRefreshing(parseInt(tabId)));
+    refreshIntervals = {};
+    chrome.storage.local.set({ intervals: {} });
   }
 });
 

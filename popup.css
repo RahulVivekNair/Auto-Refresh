@@ -1,71 +1,74 @@
-
 body {
-  font-family: Arial, sans-serif;
-  text-align: center;
-  width: 250px;
-  padding: 15px;
-  background-color: #f4f4f4;
-  border-radius: 10px;
-}
-
-.container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-h2, h3 {
-  color: #333;
-}
-
-label {
-  font-weight: bold;
-  margin-top: 10px;
-}
-
-input {
-  margin-top: 5px;
-  padding: 5px;
-  width: 80%;
-  border-radius: 5px;
-  border: 1px solid #ccc;
-  text-align: center;
-}
-
-.buttons {
-  margin-top: 10px;
-}
-
-button {
-  padding: 8px 10px;
-  margin: 5px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 14px;
-  transition: background 0.3s ease;
-}
-
-#start { background-color: #28a745; color: white; }
-#stop { background-color: #dc3545; color: white; }
-#globalStart { background-color: #007bff; color: white; }
-#globalStop { background-color: #6c757d; color: white; }
-
-button:hover { opacity: 0.8; }
-
-ul {
-  list-style-type: none;
-  padding: 0;
-  width: 100%;
-}
-
-li {
-  background: #fff;
-  padding: 5px;
-  margin: 5px 0;
-  border-radius: 5px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 14px;
-}
+    font-family: Arial, sans-serif;
+    text-align: center;
+    width: 300px;
+    padding: 15px;
+    background-color: #f4f4f4;
+    border-radius: 10px;
+  }
+  
+  .container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  h2, h3 {
+    color: #333;
+  }
+  
+  label {
+    font-weight: bold;
+    margin-top: 10px;
+  }
+  
+  input {
+    margin-top: 5px;
+    padding: 5px;
+    width: 80%;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    text-align: center;
+  }
+  
+  .buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 5px;
+    margin-top: 10px;
+  }
+  
+  button {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.3s ease;
+  }
+  
+  #start { background-color: #28a745; color: white; }
+  #stop { background-color: #dc3545; color: white; }
+  #resume { background-color: #007bff; color: white; }
+  #pause { background-color: #6c757d; color: white; }
+  #clear { background-color: #ff7f00; color: white; }
+  
+  button:hover { opacity: 0.8; }
+  
+  ul {
+    list-style-type: none;
+    padding: 0;
+    width: 100%;
+  }
+  
+  li {
+    background: #fff;
+    padding: 8px;
+    margin: 5px 0;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+  }
