@@ -3,9 +3,14 @@
     "name": "Auto Refresh Tab",
     "version": "1.0",
     "description": "Automatically refresh a tab at a desired interval.",
-    "permissions": ["storage", "tabs", "activeTab"],
+    "permissions": [
+      "storage",
+      "tabs",
+      "activeTab"
+    ],
     "background": {
-      "service_worker": "background.js"
+      "service_worker": "background.js",
+      "type": "module"
     },
     "action": {
       "default_popup": "popup.html"

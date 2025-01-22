@@ -1,53 +1,69 @@
-document.getElementById("start").addEventListener("click", () => {
-    let interval = document.getElementById("interval").value;
-    let hardRefresh = document.getElementById("hardRefresh").checked;
-    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-      chrome.runtime.sendMessage({
+// popup.js
+document.getElementById("start").addEventListener("click", async () => {
+    const interval = parseInt(document.getElementById("interval").value);
+    const hardRefresh = document.getElementById("hardRefresh").checked;
+    
+    if (interval < 1) {
+      alert("Interval must be at least 1 second");
+      return;
+    }
+    
+    const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
+    if (tabs[0]) {
+      await chrome.runtime.sendMessage({
         action: "start",
         tabId: tabs[0].id,
-        interval: parseInt(interval),
+        interval: interval,
         hardRefresh: hardRefresh
       });
-      setTimeout(updateActiveTabs, 100);
-    });
+      updateActiveTabs();
+    }
   });
   
-  document.getElementById("stop").addEventListener("click", () => {
-    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-      chrome.runtime.sendMessage({ action: "stop", tabId: tabs[0].id });
-      setTimeout(updateActiveTabs, 100);
-    });
+  document.getElementById("stop").addEventListener("click", async () => {
+    const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
+    if (tabs[0]) {
+      await chrome.runtime.sendMessage({ action: "stop", tabId: tabs[0].id });
+      updateActiveTabs();
+    }
   });
   
-  document.getElementById("clear").addEventListener("click", () => {
-    chrome.runtime.sendMessage({ action: "clear" });
-    setTimeout(updateActiveTabs, 100);
+  document.getElementById("clear").addEventListener("click", async () => {
+    await chrome.runtime.sendMessage({ action: "clear" });
+    updateActiveTabs();
   });
   
-  function updateActiveTabs() {
-    chrome.storage.local.get("intervals", (data) => {
-      let activeTabs = data.intervals || {};
-      let list = document.getElementById("activeTabs");
-      list.innerHTML = "";
-      Object.keys(activeTabs).forEach(tabId => {
-        chrome.tabs.get(parseInt(tabId), (tab) => {
-          let listItem = document.createElement("li");
-          let tabInfo = document.createElement("span");
-          tabInfo.className = "tab-info";
-          tabInfo.textContent = `${tab.title} - ${tab.url} (${activeTabs[tabId] / 1000}s)`;
-          let stopButton = document.createElement("button");
-          stopButton.textContent = "X";
-          stopButton.addEventListener("click", () => {
-            chrome.runtime.sendMessage({ action: "stop", tabId: parseInt(tabId) });
-            setTimeout(updateActiveTabs, 100);
-          });
-          listItem.appendChild(tabInfo);
-          listItem.appendChild(stopButton);
-          list.appendChild(listItem);
-        });
-      });
-    });
+  async function updateActiveTabs() {
+    const data = await chrome.storage.local.get("intervals");
+    const activeTabs = data.intervals || {};
+    const list = document.getElementById("activeTabs");
+    list.innerHTML = "";
+    
+    for (const tabId of Object.keys(activeTabs)) {
+      try {
+        const tab = await chrome.tabs.get(parseInt(tabId));
+        const listItem = document.createElement("li");
+        
+        const tabInfo = document.createElement("span");
+        tabInfo.className = "tab-info";
+        tabInfo.textContent = `${tab.title || 'Unknown Tab'} - ${tab.url || 'Unknown URL'} (${activeTabs[tabId].seconds}s)`;
+        
+        const stopButton = document.createElement("button");
+        stopButton.textContent = "X";
+        stopButton.onclick = async () => {
+          await chrome.runtime.sendMessage({ action: "stop", tabId: parseInt(tabId) });
+          updateActiveTabs();
+        };
+        
+        listItem.appendChild(tabInfo);
+        listItem.appendChild(stopButton);
+        list.appendChild(listItem);
+      } catch (error) {
+        // Tab no longer exists, clean it up
+        chrome.runtime.sendMessage({ action: "stop", tabId: parseInt(tabId) });
+      }
+    }
   }
   
+  // Start the initial update
   updateActiveTabs();
-  
