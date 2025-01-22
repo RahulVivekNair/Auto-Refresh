@@ -8,20 +8,20 @@ document.getElementById("start").addEventListener("click", () => {
         interval: parseInt(interval),
         hardRefresh: hardRefresh
       });
-      updateActiveTabs();
+      setTimeout(updateActiveTabs, 100);
     });
   });
   
   document.getElementById("stop").addEventListener("click", () => {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       chrome.runtime.sendMessage({ action: "stop", tabId: tabs[0].id });
-      updateActiveTabs();
+      setTimeout(updateActiveTabs, 100);
     });
   });
   
   document.getElementById("clear").addEventListener("click", () => {
     chrome.runtime.sendMessage({ action: "clear" });
-    updateActiveTabs();
+    setTimeout(updateActiveTabs, 100);
   });
   
   function updateActiveTabs() {
@@ -32,13 +32,16 @@ document.getElementById("start").addEventListener("click", () => {
       Object.keys(activeTabs).forEach(tabId => {
         chrome.tabs.get(parseInt(tabId), (tab) => {
           let listItem = document.createElement("li");
-          listItem.textContent = tab.title || tab.url;
+          let tabInfo = document.createElement("span");
+          tabInfo.className = "tab-info";
+          tabInfo.textContent = `${tab.title} - ${tab.url} (${activeTabs[tabId] / 1000}s)`;
           let stopButton = document.createElement("button");
-          stopButton.textContent = "✖";
+          stopButton.textContent = "X";
           stopButton.addEventListener("click", () => {
             chrome.runtime.sendMessage({ action: "stop", tabId: parseInt(tabId) });
-            updateActiveTabs();
+            setTimeout(updateActiveTabs, 100);
           });
+          listItem.appendChild(tabInfo);
           listItem.appendChild(stopButton);
           list.appendChild(listItem);
         });

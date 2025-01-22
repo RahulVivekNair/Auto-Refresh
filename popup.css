@@ -31,6 +31,14 @@ body {
     text-align: center;
   }
   
+  .checkbox-container {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 10px;
+    justify-content: center;
+  }
+  
   .buttons {
     display: flex;
     flex-wrap: wrap;
@@ -50,8 +58,6 @@ body {
   
   #start { background-color: #28a745; color: white; }
   #stop { background-color: #dc3545; color: white; }
-  #resume { background-color: #007bff; color: white; }
-  #pause { background-color: #6c757d; color: white; }
   #clear { background-color: #ff7f00; color: white; }
   
   button:hover { opacity: 0.8; }
@@ -60,6 +66,8 @@ body {
     list-style-type: none;
     padding: 0;
     width: 100%;
+    max-height: 150px;
+    overflow-y: auto;
   }
   
   li {
@@ -71,4 +79,19 @@ body {
     justify-content: space-between;
     align-items: center;
     font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .tab-info {
+    flex-grow: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .tab-controls {
+    display: flex;
+    align-items: center;
+    gap: 5px;
   }

@@ -1,3 +1,4 @@
+// background.js
 let refreshIntervals = {};
 
 chrome.storage.local.get("intervals", (data) => {
@@ -9,10 +10,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     startRefreshing(request.tabId, request.interval, request.hardRefresh);
   } else if (request.action === "stop") {
     stopRefreshing(request.tabId);
-  } else if (request.action === "resume") {
-    Object.keys(refreshIntervals).forEach(tabId => startRefreshing(parseInt(tabId), request.interval, request.hardRefresh));
-  } else if (request.action === "pause") {
-    Object.keys(refreshIntervals).forEach(tabId => stopRefreshing(parseInt(tabId)));
   } else if (request.action === "clear") {
     Object.keys(refreshIntervals).forEach(tabId => stopRefreshing(parseInt(tabId)));
     refreshIntervals = {};
