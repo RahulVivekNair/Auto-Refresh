@@ -1,0 +1,13 @@
+{
+    "manifest_version": 3,
+    "name": "Auto Refresh Tab",
+    "version": "1.0",
+    "description": "Automatically refresh a tab at a desired interval.",
+    "permissions": ["storage", "tabs", "activeTab"],
+    "background": {
+      "service_worker": "background.js"
+    },
+    "action": {
+      "default_popup": "popup.html"
+    }
+  }
